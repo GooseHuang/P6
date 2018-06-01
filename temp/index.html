@@ -88,24 +88,35 @@
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   // 读取csv并传入图表
-  d3.csv("Survival_by_cabin.csv", function(data) {
+  d3.csv("survival_by_cabin.csv", function(data) {
 
   		//已经全部读取进data里面了
 
-      var status = ["Survived", "Perished"];
+      var status = ["Survived_rate", "Perished_rate"];
       	//创建数据层级
       var rate_layers = d3.layout.stack()(status.map(function(temp) {
       				//temp这里就是status中的值
-      				//debugger;
           return data.map(function(d) {
           			//返回一个字典
               return {x : d.Pclass,
-                 	 y : +d[temp+"_Rate"],
-                 	 z : +d[temp] 
-                 	};
+                 	 y : +d[temp] };
+                   //debugger;
           });
       }));
 
+      var count_status = ["Survived","Perished"]
+
+      var count_layers = d3.layout.stack()(count_status.map(function(temp) {
+      				//temp这里就是status中的值
+          return data.map(function(d) {
+          			//返回一个字典
+              return {x : d.Pclass,
+                 	 y : +d[temp] };
+                 
+          });
+      }));
+
+      debugger;
 
       // 设置数据定义域和值域     x输入的是全部的ordinal变量
       x.domain(rate_layers[0].map(function(d) { return d.x; }));
@@ -137,7 +148,7 @@
                   var yPosition = d3.mouse(this)[1] - 25;
                   tooltip.attr("transform", "translate(" + xPosition + "," +
                       yPosition + ")");
-                  tooltip.select("text").text("Ratio: "+d.y+ " Count: "+d.z);})
+                  tooltip.select("text").text("Ratio: "+d.y);})
               .on("mouseout", function() { tooltip.style("display", "none");});
 
       //debugger;
@@ -171,8 +182,8 @@
 
 
       tooltip.append("rect")
-              .attr("width", 0)
-              .attr("height", 0)
+              .attr("width", 65)
+              .attr("height", 20)
               .attr("fill", "white")
               .style("opacity", 0.5);
       tooltip.append("text")
@@ -235,13 +246,12 @@
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-  d3.csv("survival_by_age.csv", function(data) {
-      var status = ["Survived", "Perished"];
+  d3.csv("Survival_by_age.csv", function(data) {
+      var status = ["Survived_rate", "Perished_rate"];
       var rate_layers = d3.layout.stack()(status.map(function(temp) {
           return data.map(function(d) {
               return {x : d.Age,
-                  y : +d[temp+"_Rate"],
-                   z : +d[temp]};
+                  y : +d[temp] };
                 
           });
 
@@ -271,7 +281,7 @@
                   var yPosition = d3.mouse(this)[1] - 25;
                   tooltip.attr("transform", "translate(" + xPosition + "," +
                       yPosition + ")");
-                  tooltip.select("text").text("Ratio: "+d.y+ " Count: "+d.z);
+                  tooltip.select("text").text("Ratio: "+d.y);
 
               		})
               .on("mouseout", function() { tooltip.style("display", "none");});
@@ -297,8 +307,8 @@
               .attr("class", "tooltip")
               .style("display", "none");
       tooltip.append("rect")
-              .attr("width", 0)
-              .attr("height", 0)
+              .attr("width", 65)
+              .attr("height", 20)
               .attr("fill", "white")
               .style("opacity", 0.5);
       tooltip.append("text")
@@ -367,19 +377,18 @@
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", "translate("+margin.left+","+20+")");
-  d3.csv("survival_by_class_and_gender.csv", function(data) {
+  d3.csv("Survival_by_class_and_gender.csv", function(data) {
 
       //debugger;
-      var male_status = ["Male_Survived", "Male_Perished"];
-      var female_status = ["Female_Survived", "Female_Perished"];
+      var male_status = ["Male_Survived_Rate", "Male_Perished_Rate"];
+      var female_status = ["Female_Survived_Rate", "Female_Perished_Rate"];
 
       //读取女性比例
       var layers = d3.layout.stack()(female_status.map(function(c) {
           return data.map(function(d) {
               return {
                   x : d.Pclass,
-                  y : +d[c+"_Rate"],
-                  z : +d[c],
+                  y : +d[c],
                   status : c
               };
           });
@@ -390,8 +399,7 @@
           return data.map(function(d) {
               return {
                   x : d.Pclass,
-                  y : +d[c+"_Rate"],
-                  z : +d[c],
+                  y : +d[c],
                   status : c
               };
           });
@@ -434,7 +442,7 @@
                   var xPosition = d3.mouse(this)[0] - 15;
                   var yPosition = d3.mouse(this)[1] - 25;
                   tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-                  tooltip.select("text").text("Ratio: "+d.y+ " Count: "+d.z);})
+                  tooltip.select("text").text("Ratio: "+d.y);})
               .on("mouseout", function() { tooltip.style("display", "none");})
 
 
@@ -453,7 +461,7 @@
                   var xPosition = d3.mouse(this)[0] - 15;
                   var yPosition = d3.mouse(this)[1] - 25;
                   tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-                  tooltip.select("text").text("Ratio: "+d.y+ " Count: "+d.z);})
+                  tooltip.select("text").text("Ratio: "+d.y);})
               .on("mouseout", function() { tooltip.style("display", "none");})
 
       svg3.append("g")
@@ -505,8 +513,8 @@
               .attr("class", "tooltip")
               .style("display", "none");
       tooltip.append("rect")
-              .attr("width", 0)
-              .attr("height", 0)
+              .attr("width", 65)
+              .attr("height", 20)
               .attr("fill", "white")
               .style("opacity", 0.5);
       tooltip.append("text")
